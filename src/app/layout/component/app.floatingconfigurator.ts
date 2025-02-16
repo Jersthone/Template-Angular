@@ -22,7 +22,24 @@ export class AppFloatingConfigurator {
 
     isDarkTheme = computed(() => this.LayoutService.layoutConfig().darkTheme);
 
+    ngOnInit() {
+        // Leer tema almacenado en localStorage al iniciar
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            this.LayoutService.layoutConfig.update((state) => ({ 
+                ...state, 
+                darkTheme: savedTheme === 'dark' 
+            }));
+        }
+    }
+
     toggleDarkMode() {
-        this.LayoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
+        const newTheme = !this.LayoutService.layoutConfig().darkTheme;
+
+        // Actualizar el estado en LayoutService
+        this.LayoutService.layoutConfig.update((state) => ({ ...state, darkTheme: newTheme }));
+
+        // Guardar la preferencia en localStorage
+        localStorage.setItem('theme', newTheme ? 'dark' : 'light');
     }
 }

@@ -92,7 +92,7 @@ export class AppTopbar {
         },
         {
             label: 'Cerrar Sesión',
-            icon: 'pi pi-fw pi-sign-in',
+            icon: 'pi pi-fw pi-sign-out',
             routerLink: ['/auth/login']
         },
     ];
@@ -104,6 +104,8 @@ export class AppTopbar {
     ngOnInit() {
         // Recuperamos el tema guardado en localStorage
         const savedTheme = localStorage.getItem('theme');
+
+        console.log(savedTheme);
         
         if (savedTheme) {
           // Aplicamos el tema guardado

@@ -19,6 +19,7 @@ const presets = {
 declare type KeyOfType<T> = keyof T extends infer U ? U : never;
 
 declare type SurfacesType = {
+    displayName?: any;
     name?: string;
     palette?: {
         0?: string;
@@ -43,12 +44,12 @@ declare type SurfacesType = {
     template: `
         <div class="flex flex-col gap-4">
             <div>
-                <span class="text-sm text-muted-color font-semibold">Primary</span>
+                <span class="text-sm text-muted-color font-semibold">Primario</span>
                 <div class="pt-2 flex gap-2 flex-wrap justify-start">
                     @for (primaryColor of primaryColors(); track primaryColor.name) {
                         <button
                             type="button"
-                            [title]="primaryColor.name"
+                            [title]="primaryColor.displayName"
                             (click)="updateColors($event, 'primary', primaryColor)"
                             [ngClass]="{ 'outline-primary': primaryColor.name === selectedPrimaryColor() }"
                             class="border-none w-5 h-5 rounded-full p-0 cursor-pointer outline-none outline-offset-1"
@@ -60,7 +61,7 @@ declare type SurfacesType = {
                 </div>
             </div>
             <div>
-                <span class="text-sm text-muted-color font-semibold">Surface</span>
+                <span class="text-sm text-muted-color font-semibold">Fondo</span>
                 <div class="pt-2 flex gap-2 flex-wrap justify-start">
                     @for (surface of surfaces; track surface.name) {
                         <button
@@ -76,12 +77,12 @@ declare type SurfacesType = {
                     }
                 </div>
             </div>
-            <div class="flex flex-col gap-2">
+            <!-- <div class="flex flex-col gap-2">
                 <span class="text-sm text-muted-color font-semibold">Presets</span>
                 <p-selectbutton [options]="presets" [ngModel]="selectedPreset()" (ngModelChange)="onPresetChange($event)" [allowEmpty]="false" size="small" />
-            </div>
+            </div> -->
             <div *ngIf="showMenuModeButton()" class="flex flex-col gap-2">
-                <span class="text-sm text-muted-color font-semibold">Menu Mode</span>
+                <span class="text-sm text-muted-color font-semibold">Modo Menú</span>
                 <p-selectbutton [ngModel]="menuMode()" (ngModelChange)="onMenuModeChange($event)" [options]="menuModeOptions" [allowEmpty]="false" size="small" />
             </div>
         </div>
@@ -106,8 +107,8 @@ export class AppConfigurator {
     showMenuModeButton = signal(!this.router.url.includes('auth'));
 
     menuModeOptions = [
-        { label: 'Static', value: 'static' },
-        { label: 'Overlay', value: 'overlay' }
+        { label: 'Estático', value: 'static' },
+        { label: 'Superpuesto', value: 'overlay' }
     ];
 
     ngOnInit() {
@@ -133,7 +134,7 @@ export class AppConfigurator {
 
     surfaces: SurfacesType[] = [
         {
-            name: 'slate',
+            name: 'Slate',
             palette: {
                 0: '#ffffff',
                 50: '#f8fafc',
@@ -150,7 +151,7 @@ export class AppConfigurator {
             }
         },
         {
-            name: 'gray',
+            name: 'Gris',
             palette: {
                 0: '#ffffff',
                 50: '#f9fafb',
@@ -167,7 +168,7 @@ export class AppConfigurator {
             }
         },
         {
-            name: 'zinc',
+            name: 'Zinc',
             palette: {
                 0: '#ffffff',
                 50: '#fafafa',
@@ -184,7 +185,7 @@ export class AppConfigurator {
             }
         },
         {
-            name: 'neutral',
+            name: 'Neutral',
             palette: {
                 0: '#ffffff',
                 50: '#fafafa',
@@ -201,7 +202,7 @@ export class AppConfigurator {
             }
         },
         {
-            name: 'stone',
+            name: 'Stone',
             palette: {
                 0: '#ffffff',
                 50: '#fafaf9',
@@ -218,7 +219,7 @@ export class AppConfigurator {
             }
         },
         {
-            name: 'soho',
+            name: 'Soho',
             palette: {
                 0: '#ffffff',
                 50: '#ececec',
@@ -235,7 +236,7 @@ export class AppConfigurator {
             }
         },
         {
-            name: 'viva',
+            name: 'Viva',
             palette: {
                 0: '#ffffff',
                 50: '#f3f3f3',
@@ -252,7 +253,7 @@ export class AppConfigurator {
             }
         },
         {
-            name: 'ocean',
+            name: 'Ocean',
             palette: {
                 0: '#ffffff',
                 50: '#fbfcfc',
@@ -282,16 +283,36 @@ export class AppConfigurator {
 
     primaryColors = computed<SurfacesType[]>(() => {
         const presetPalette = presets[this.layoutService.layoutConfig().preset as KeyOfType<typeof presets>].primitive;
-        const colors = ['emerald', 'green', 'lime', 'orange', 'amber', 'yellow', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose'];
-        const palettes: SurfacesType[] = [{ name: 'noir', palette: {} }];
-
+    
+        const colors = [
+            { nombre: 'Esmeralda', valor: 'emerald' },
+            { nombre: 'Verde', valor: 'green' },
+            { nombre: 'Lima', valor: 'lime' },
+            { nombre: 'Naranja', valor: 'orange' },
+            { nombre: 'Ámbar', valor: 'amber' },
+            { nombre: 'Amarillo', valor: 'yellow' },
+            { nombre: 'Verde azulado', valor: 'teal' },
+            { nombre: 'Cian', valor: 'cyan' },
+            { nombre: 'Celeste', valor: 'sky' },
+            { nombre: 'Azul', valor: 'blue' },
+            { nombre: 'Índigo', valor: 'indigo' },
+            { nombre: 'Violeta', valor: 'violet' },
+            { nombre: 'Púrpura', valor: 'purple' },
+            { nombre: 'Fucsia', valor: 'fuchsia' },
+            { nombre: 'Rosa', valor: 'pink' },
+            { nombre: 'Rosado', valor: 'rose' }
+        ];
+    
+        const palettes: SurfacesType[] = [{ name: 'noir', displayName: localStorage.getItem('theme') === 'dark' ? 'Blanco' : 'Negro', palette: {} }];
+    
         colors.forEach((color) => {
             palettes.push({
-                name: color,
-                palette: presetPalette?.[color as KeyOfType<typeof presetPalette>] as SurfacesType['palette']
+                name: color.valor, // Se mantiene en inglés para acceder a presetPalette
+                displayName: color.nombre, // Nombre en español para mostrar en la interfaz
+                palette: presetPalette?.[color.valor as KeyOfType<typeof presetPalette>] as SurfacesType['palette']
             });
         });
-
+    
         return palettes;
     });
 
